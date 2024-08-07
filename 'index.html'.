@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Confesiones Anónimas</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #confessions { margin-top: 20px; }
+        textarea { width: 100%; height: 100px; }
+    </style>
+</head>
+<body>
+    <h1>Confesiones Anónimas</h1>
+    <form id="confession-form">
+        <textarea name="confession" required></textarea>
+        <button type="submit">Enviar</button>
+    </form>
+    <div id="confessions"></div>
+
+    <script>
+        document.getElementById('confession-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const confession = e.target.elements.confession.value;
+            await fetch('https://<your-usuariox777-username>.pythonanywhere.com/submit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ confession })
+            });
+            e.target.reset();
+            loadConfessions();
+        });
+
+        async function loadConfessions() {
+            const response = await fetch('https://<your-usuariox777-username>.pythonanywhere.com/confessions');
+            const confessions = await response.json();
+            document.getElementById('confessions').innerHTML = confessions.map(c => `<p>${c}</p>`).join('');
+        }
+
+        loadConfessions();
+    </script>
+</body>
+</html>
